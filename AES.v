@@ -1,7 +1,7 @@
 module AES(
     input i_Clk, i_Rst,
     input i_fStart,
-    input i_fEncrypt,
+    input i_fEnc,
     input [127:0] i_Text,
     input [127:0] i_Key,
     output [127:0] o_Data,
@@ -46,9 +46,9 @@ module AES(
 
 
     // Module
-    SubByte      SB(c_RoundText, SB_o_Data, i_fEncrypt);
-    ShiftRow     SR(SB_o_Data, SR_o_Data, i_fEncrypt);
-    MixCol_Top   MC0(MC_i_Data, MC_o_Data, i_fEncrypt);
+    SubByte      SB(c_RoundText, SB_o_Data, i_fEnc);
+    ShiftRow     SR(SB_o_Data, SR_o_Data, i_fEnc);
+    MixCol_Top   MC0(MC_i_Data, MC_o_Data, i_fEnc);
 
     KeyExpansion KE(c_Key, c_Round, KE_o_Key, fKE_Encrypt);
 
@@ -62,9 +62,9 @@ module AES(
 
     assign fIsFirstText = i_fStart & c_FirstText;
 
-    assign fKE_Encrypt = fInvKey | i_fEncrypt;
+    assign fKE_Encrypt = fInvKey | i_fEnc;
 
-    assign fKeyMC = fRepeat & !i_fEncrypt;
+    assign fKeyMC = fRepeat & !i_fEnc;
 
     assign MC_i_Data = fKeyMC ? SR_o_Data ^ c_Key : SR_o_Data;
 
@@ -111,12 +111,12 @@ module AES(
         
         n_NextKey = 
             fIsFirstText ? i_Key :
-            i_fEncrypt & fFinal ? c_Key :
+            i_fEnc & fFinal ? c_Key :
             fLstRepeat & fInvKey ? KE_o_Key : c_NextKey;
 
         n_State = c_State;
         case(c_State)
-            IDLE:    n_State = i_fStart ? (i_fEncrypt ? FIRST : INV_KEY) : c_State;
+            IDLE:    n_State = i_fStart ? (i_fEnc ? FIRST : INV_KEY) : c_State;
 
             INV_KEY: n_State = fLstRepeat ? FIRST : c_State;
 
