@@ -1,4 +1,4 @@
-module MixCol_Top(
+fmodule MixCol_Top(
     input [127:0] i_State,
     output reg [127:0] o_State,
     input i_fEnc
