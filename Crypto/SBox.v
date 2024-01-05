@@ -1,12 +1,12 @@
 module SBox(
     input [7:0] i_Data,
     output reg [7:0] o_Data,
-	input fEnc
+	input i_fDec
 );
  
 
 always@(i_Data)
-	if(fEnc) begin
+	if(!i_fDec) begin
 	   case(i_Data)
        8'h00: o_Data = 8'h63;
 	   8'h01: o_Data = 8'h7c;

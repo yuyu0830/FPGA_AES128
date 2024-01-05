@@ -1,7 +1,7 @@
 module MixCol_Top(
     input [127:0] i_State,
     output reg [127:0] o_State,
-    input i_fEnc
+    input i_fDec
 );
 
 parameter shift3 = 3,
@@ -60,7 +60,7 @@ function [7:0] hex09;
     
 endfunction
     always@(*) begin
-        if(i_fEnc) begin
+        if(!i_fDec) begin
             o_State[120 +:8] = hex02(i_State[120+:8],shift1) ^ hex03(i_State[112+:8])        ^ i_State[104+:8]               ^ i_State[96+:8];                   // 2 3 1 1
             o_State[112 +:8] = i_State[120+:8]               ^ hex02(i_State[112+:8],shift1) ^ hex03(i_State[104+:8])        ^ i_State[96+:8];                   // 1 2 3 1
             o_State[104 +:8] = i_State[120+:8]               ^ i_State[112+:8]               ^ hex02(i_State[104+:8],shift1) ^ hex03(i_State[96+:8]);            // 1 1 2 3
