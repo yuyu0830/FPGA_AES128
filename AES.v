@@ -1,4 +1,4 @@
-module AES(Y
+module AES(
     input i_Clk, i_Rst,
     input i_fStart,
     input i_fDec,
@@ -37,7 +37,7 @@ module AES(Y
 
     wire [127:0] KE_o_Key;
 
-    wire fKE_Encrypt;
+    wire fKE_Dec;
     wire fKeyMC;
 
     wire fIsFirstText;
@@ -50,7 +50,7 @@ module AES(Y
     ShiftRow     SR(SB_o_Data, SR_o_Data, i_fDec);
     MixCol_Top   MC0(MC_i_Data, MC_o_Data, i_fDec);
 
-    KeyExpansion KE(c_Key, c_Round, KE_o_Key, fKE_Encrypt);
+    KeyExpansion KE(c_Key, c_Round, KE_o_Key, fKE_Dec);
 
 
     // assign
@@ -62,9 +62,9 @@ module AES(Y
 
     assign fIsFirstText = i_fStart & c_FirstText;
 
-    assign fKE_Encrypt = fGenKey | !i_fDec;
+    assign fKE_Dec = !fGenKey & i_fDec;
 
-    assign fKeyMC = fMiddle & !i_fDec;
+    assign fKeyMC = fMiddle & i_fDec;
 
     assign MC_i_Data = fKeyMC ? SR_o_Data ^ c_Key : SR_o_Data;
 

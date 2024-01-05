@@ -6,7 +6,7 @@ module KeySubByte(
 genvar i;
 generate
     for(i=0;i<31;i=i+8) begin :KeySubByte
-        SBox Sb(i_Data[i +:8],o_Data[i +:8], 1'b1);
+        SBox Sb(i_Data[i +:8],o_Data[i +:8], 1'b0);
     end
 endgenerate
 
