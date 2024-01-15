@@ -96,9 +96,9 @@ module AES(
     always@*
     begin
         n_Text = 
-            fIdle   ? 0 :
-            fFirst  ? i_Text ^ c_NextKey :
-            fMiddle ? (fKeyMC ? MC_o_Data : MC_o_Data ^ c_Key) :
+            fIdle   ? i_Text :
+            fFirst  ? c_Text ^ c_NextKey :
+            fMiddle ? (!i_fDec ? MC_o_Data : MC_o_Data ^ c_Key) :
             fFinal  ? SR_o_Data ^ c_Key : c_Text;
 
         n_Key = 

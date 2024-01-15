@@ -36,5 +36,21 @@ reg Clk;
         #100 i_fStart = 1; #20 i_fStart = 0;
         #1500;
 
+        Rst = 0;
+        @(negedge Clk) Rst = 1;
+        i_Data = 128'h00112233445566778899aabbccddeeff;
+        i_Key  = 128'h000102030405060708090a0b0c0d0e0f;
+        i_fDec = 0;
+        #100 i_fStart = 1; #20 i_fStart = 0;
+        #1500;
+
+        Rst = 0;
+		@(negedge Clk) Rst = 1;
+        i_Data = 128'h69c4e0d86a7b0430d8cdb78070b4c55a;
+        i_fDec = 1;
+        #100 i_fStart = 1; #20 i_fStart = 0;
+        #1500;
+
+
     end
 endmodule
