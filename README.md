@@ -1,12 +1,9 @@
-# AES128
-AES128 with verilog/FPGA
-
 ## 참고 링크
 [암호화 블로그 정리](https://blog.naver.com/abdds1166/223306126239)
 
 [복호화 블로그 정리](https://blog.naver.com/abdds1166/223307812573)
 
-
+---
 
 ## AES-128
 [링크](https://github.com/yuyu0830/FPGA_Encryption/tree/main/AES/AES128)
@@ -20,6 +17,8 @@ AES128 with verilog/FPGA
 ### 키확장
 [KeyExpansion.v](https://github.com/yuyu0830/FPGA_AES128/blob/main/KeyExpansion/KeyExpansion.v)
 
+
+---
 
 ## SHA-256
 [링크](https://github.com/yuyu0830/FPGA_Encryption/tree/main/SHA/SHA256)
