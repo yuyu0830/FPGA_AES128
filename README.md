@@ -1,4 +1,4 @@
-# FPGA_AES128
+# AES128
 AES128 with verilog/FPGA
 
 ## 참고 링크
@@ -8,15 +8,21 @@ AES128 with verilog/FPGA
 
 
 
-## 구조
-### TOP 모듈
-[AES_Top.v](https://github.com/yuyu0830/FPGA_AES128/blob/main/AES_TOP.v)
+## AES-128
+[링크](https://github.com/yuyu0830/FPGA_Encryption/tree/main/AES/AES128)
 
-### 통신
-[UART 모듈(작성중)](https://github.com/yuyu0830/FPGA_AES128/blob/main/UART_Top.v)
+### TOP 모듈
+[AES_Top.v](https://github.com/yuyu0830/FPGA_Encryption/blob/main/AES/AES128/AES_TOP.v)
 
 ### 암/복호화
-[Crypto.v](https://github.com/yuyu0830/FPGA_AES128/blob/main/Crypto/Crypto.v)
+[AES.v](https://github.com/yuyu0830/FPGA_Encryption/blob/main/AES/AES128/AES.v)
 
 ### 키확장
 [KeyExpansion.v](https://github.com/yuyu0830/FPGA_AES128/blob/main/KeyExpansion/KeyExpansion.v)
+
+
+## SHA-256
+[링크](https://github.com/yuyu0830/FPGA_Encryption/tree/main/SHA/SHA256)
+
+###TOP 모듈
+[SHA.v](https://github.com/yuyu0830/FPGA_Encryption/blob/main/SHA/SHA256/SHA.v)
