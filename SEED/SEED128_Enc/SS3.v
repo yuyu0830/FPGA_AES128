@@ -1,14 +1,14 @@
 module SS3 (
     input [7:0] i_Data,
     output [31:0] o_Data
-)
+);
 
     reg [31:0] outS;
 
     assign o_Data = outS;
 
     always@*
-         (i_Data)
+        case (i_Data)
             8'h 0 : outS = 32'h08303838; 8'h 1 : outS = 32'hc8e0e828; 8'h 2 : outS = 32'h0d212c2d; 8'h 3 : outS = 32'h86a2a426;
 			8'h 4 : outS = 32'hcfc3cc0f; 8'h 5 : outS = 32'hced2dc1e; 8'h 6 : outS = 32'h83b3b033; 8'h 7 : outS = 32'h88b0b838;
 			8'h 8 : outS = 32'h8fa3ac2f; 8'h 9 : outS = 32'h40606020; 8'h A : outS = 32'h45515415; 8'h B : outS = 32'hc7c3c407;
@@ -91,5 +91,6 @@ module SS3 (
 			
 			default : outS = 32'h00000000;
         
+		endcase
 
 endmodule

@@ -1,7 +1,7 @@
 module SS2 (
     input [7:0] i_Data,
     output [31:0] o_Data
-)
+);
 
     reg [31:0] outS;
 

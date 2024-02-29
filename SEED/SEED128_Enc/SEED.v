@@ -1,17 +1,17 @@
 module SEED (
     input i_Clk, i_Rst,
     input [127:0] i_Text, i_Key,
-    input i_fStart, i_Dec,
+    input i_fStart,
     output [127:0] o_Text,
     output o_fDone
 );
 
     //parameter
     parameter
-        IDLE    = 2'h0,
-        ENC     = 2'h1,
-        DEC     = 2'h2,
-        DONE    = 2'h3;
+        IDLE    = 2'b00,
+        ENC     = 2'b01,
+        DEC     = 2'b10,
+        DONE    = 2'b11;
 
     
     //register
@@ -28,8 +28,8 @@ module SEED (
 
 
     //module
-    KeyGenerator KG0();
-    fFunction F0(fDec ? c_L : c_R,  F_o_Data);
+    KeyGenerator KG0(i_Clk, i_Rst, i_fStart, i_Key, c_Round, KG_o_Data);
+    fFunction F0(c_R, KG_o_Data, F_o_Data);
     
 
     //assign
@@ -37,7 +37,10 @@ module SEED (
         fLstRound   = &c_Round,
         fIdle       = c_State == IDLE,
         fDec        = c_State == DEC,
-        fRounding   = (c_State == ENC) | (c_State == DEC);
+        fRunning    = (c_State == ENC) | (c_State == DEC),
+        o_Text      = o_fDone ? {c_R, c_L} : 0,
+        o_fDone     = c_State == DONE;
+        
 
 
     always@ (posedge i_Clk, negedge i_Rst)
@@ -53,25 +56,20 @@ module SEED (
             c_R     = n_R;
         end
 
-    always
+    always@*
     begin
         n_Round = fRunning ? c_Round + 1 : 0;
         n_L = fRunning ? c_R : (fIdle & i_fStart ? i_Text[127:64] : 0);
         n_R = fRunning ? F_o_Data ^ c_L : (fIdle & i_fStart ? i_Text[63:0] : 0);
 
-
+        n_State = c_State;
         case(c_State)
-            IDLE:   n_State = i_fStart ? (i_Dec ? DEC : ENC) : c_State;
+            IDLE:   n_State = i_fStart ? ENC : c_State;
 
             ENC:    n_State = fLstRound ? DONE : c_State;
-
-            DEC:    n_State = fLstRound ? DONE : c_State;
 
             DONE:   n_State = IDLE;
         endcase
     end
-
-
-
 
 endmodule

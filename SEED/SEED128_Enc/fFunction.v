@@ -16,12 +16,12 @@ module fFunction(
     //assign
     assign
         C   = i_Data[63:32] ^ i_Key[63:32],
-        D   = i_Data[31: 0] ^ i_key[31: 0];
+        D   = i_Data[31: 0] ^ i_Key[31: 0];
 
     assign 
-        G0_in = D ^ C,
+        G0_in = C ^ D,
         G1_in = C + G0_out,
-        G2_in = G1_out ^ G2_out;
+        G2_in = G0_out + G1_out;
 
     assign
         o_Data = {G1_out + G2_out, G2_out};
