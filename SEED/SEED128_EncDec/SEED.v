@@ -26,13 +26,13 @@ module SEED (
     //wire
     wire fLstRound;
     wire fIdle, fKeyIn, fEnc, fGenKey, fRunning, fDec;
-    wire [63:0] F_i_Data, F_o_Data;
+    wire [63:0] F_o_Data;
     wire [63:0] KG_o_Data;
 
 
     //module
     KeyGenerator KG0(i_Clk, i_Rst, fKeyIn, fDec, fRunning & !fLstRound, i_Text, c_Round, KG_o_Data);
-    fFunction F0(F_i_Data, KG_o_Data, F_o_Data);
+    fFunction F0(c_R, KG_o_Data, F_o_Data);
     
 
     //assign
@@ -44,8 +44,7 @@ module SEED (
         fGenKey     = c_State == GENKEY,
         fDec        = c_State == DEC,
         fRunning    = fEnc | fGenKey | fDec,
-        F_i_Data    = fDec ? c_L : c_R,
-        o_Text      = o_fDone ? (c_fDec ? {c_L, c_R} : {c_R, c_L}) : 0,
+        o_Text      = o_fDone ? {c_R, c_L} : 0,
         o_fDone     = c_State == DONE;
 
     always@ (posedge i_Clk, negedge i_Rst)
@@ -67,8 +66,8 @@ module SEED (
     begin
         n_fDec = i_fStart ? i_fDec : c_fDec;
         n_Round = fRunning ? c_Round + 1 : 0;
-        n_L = fIdle & i_fStart ? (i_fDec ? i_Text[ 63: 0] : i_Text[127:64]) : (fDec ? F_o_Data ^ c_R : (fEnc ? c_R : c_L));
-        n_R = fIdle & i_fStart ? (i_fDec ? i_Text[127:64] : i_Text[ 63: 0]) : (fDec ? c_L : (fEnc ? F_o_Data ^ c_L : c_R));
+        n_L = fIdle & i_fStart ? i_Text[127:64] : (fEnc & fDec ? c_R : c_L) ;
+        n_R = fIdle & i_fStart ? i_Text[ 63: 0] : (fEnc & fDec ? fEnc ? F_o_Data ^ c_L : c_R);
 
         // n_L = fDec | fEnc ? (fDec ? F_o_Data ^ c_R : c_R) : (fIdle & i_fStart ? i_Text[127:64] : 0);
         // n_R = fDec | fEnc ? (fDec ? c_L : F_o_Data ^ c_L) : (fIdle & i_fStart ? i_Text[63:0] : 0);
