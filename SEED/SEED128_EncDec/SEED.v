@@ -66,8 +66,8 @@ module SEED (
     begin
         n_fDec = i_fStart ? i_fDec : c_fDec;
         n_Round = fRunning ? c_Round + 1 : 0;
-        n_L = fIdle & i_fStart ? i_Text[127:64] : (fEnc & fDec ? c_R : c_L) ;
-        n_R = fIdle & i_fStart ? i_Text[ 63: 0] : (fEnc & fDec ? fEnc ? F_o_Data ^ c_L : c_R);
+        n_L = fIdle & i_fStart ? i_Text[127:64] : (fEnc | fDec ? c_R : c_L);
+        n_R = fIdle & i_fStart ? i_Text[ 63: 0] : (fEnc | fDec ? F_o_Data ^ c_L : c_R);
 
         // n_L = fDec | fEnc ? (fDec ? F_o_Data ^ c_R : c_R) : (fIdle & i_fStart ? i_Text[127:64] : 0);
         // n_R = fDec | fEnc ? (fDec ? c_L : F_o_Data ^ c_L) : (fIdle & i_fStart ? i_Text[63:0] : 0);
