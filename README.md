@@ -1,27 +1,38 @@
-## 참고 링크
-[암호화 블로그 정리](https://blog.naver.com/abdds1166/223306126239)
-
-[복호화 블로그 정리](https://blog.naver.com/abdds1166/223307812573)
-
----
 
 ## AES-128
 [링크](https://github.com/yuyu0830/FPGA_Encryption/tree/main/AES/AES128)
 
-### TOP 모듈
-[AES_Top.v](https://github.com/yuyu0830/FPGA_Encryption/blob/main/AES/AES128/AES_TOP.v)
+[암호화 알고리즘](https://blog.naver.com/abdds1166/223306126239)
 
-### 암/복호화
-[AES.v](https://github.com/yuyu0830/FPGA_Encryption/blob/main/AES/AES128/AES.v)
+[복호화 알고리즘](https://blog.naver.com/abdds1166/223307812573)
 
-### 키확장
-[KeyExpansion.v](https://github.com/yuyu0830/FPGA_AES128/blob/main/KeyExpansion/KeyExpansion.v)
-
+[설계 및 구현](https://blog.naver.com/abdds1166/223324462190)
 
 ---
 
 ## SHA-256
 [링크](https://github.com/yuyu0830/FPGA_Encryption/tree/main/SHA/SHA256)
 
-###TOP 모듈
-[SHA.v](https://github.com/yuyu0830/FPGA_Encryption/blob/main/SHA/SHA256/SHA.v)
+[알고리즘](https://blog.naver.com/abdds1166/223325487599)
+
+[설계](https://blog.naver.com/abdds1166/223326892689)
+
+
+---
+
+## SEED-128 암복호화
+[링크](https://github.com/yuyu0830/FPGA_Encryption/tree/main/SEED/SEED128_EncDec)
+
+[알고리즘](https://blog.naver.com/abdds1166/223352820669)
+
+[Feistel 구조](https://blog.naver.com/abdds1166/223352431248)
+
+[설계 및 구현](https://blog.naver.com/abdds1166/223381577958)
+
+
+---
+
+## SEED-128 면적 최소화
+[링크](https://github.com/yuyu0830/FPGA_Encryption/tree/main/SEED/SEED128_Minimize)
+
+[설계](https://blog.naver.com/abdds1166/223388908755)
