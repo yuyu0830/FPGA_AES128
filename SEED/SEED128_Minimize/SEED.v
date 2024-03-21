@@ -35,7 +35,6 @@ module SEED (
     wire fIdle, fGetKey, fEnc, fJumpKey, fDec;
     wire fOdd;
     wire [31:0] g_In, g_Out, roundKey;
-    wire [63:0] F_o_Data;
 
 
     //module
@@ -55,7 +54,6 @@ module SEED (
         fRunning    = fEnc | fJumpKey | fDec,
         fOdd        = !c_Round[0],
         roundKey    = c_fDec ? KC[(15 - c_Round)*32+:32] : KC[c_Round*32+:32],
-        F_o_Data    = {c_g1_Out + g_Out, g_Out},
         o_Text      = o_fDone ? {c_R, c_L} : 0,
         o_fDone     = c_State == DONE;
 
@@ -110,22 +108,12 @@ module SEED (
         n_g1_Out = c_Clk == 3 ? g_Out : c_g1_Out;
 
         n_L = fIdle & fFirst ? i_Data[127:64] : (c_Clk[2] ? c_R : c_L);
-        n_R = fIdle & fFirst ? i_Data[ 63: 0] : (c_Clk[2] ? F_o_Data ^ c_L : c_R);
+        n_R = fIdle & fFirst ? i_Data[ 63: 0] : (c_Clk[2] ? {c_g1_Out + g_Out, g_Out} ^ c_L : c_R);
 
-        // n_A = fGetKey ? i_Data[127:96] : (fLstClk ? (c_fDec ? (!fOdd ? c_A : {c_A[23: 0], c_B[31:24]}) : (fOdd ? {c_B[ 7: 0], c_A[31: 8]} : c_A)) : c_A);
-        // n_B = fGetKey ? i_Data[ 95:64] : (fLstClk ? (c_fDec ? (!fOdd ? c_B : {c_B[23: 0], c_A[31:24]}) : (fOdd ? {c_A[ 7: 0], c_B[31: 8]} : c_B)) : c_B);
-        // n_C = fGetKey ? i_Data[ 63:32] : (fLstClk ? (c_fDec ? (!fOdd ? {c_D[ 7: 0], c_C[31: 8]} : c_C) : (fOdd ? c_C : {c_C[23: 0], c_D[31:24]})) : c_C);
-        // n_D = fGetKey ? i_Data[ 31: 0] : (fLstClk ? (c_fDec ? (!fOdd ? {c_C[ 7: 0], c_D[31: 8]} : c_D) : (fOdd ? c_D : {c_D[23: 0], c_C[31:24]})) : c_D);
-
-        // n_A = fGetKey ? i_Data[127:96] : (fLstClk ? (c_fDec ? (!fOdd ? c_A : {c_A[23: 0], c_B[31:24]}) : (!fOdd ? c_A : {c_B[ 7: 0], c_A[31: 8]})) : c_A);
-        // n_B = fGetKey ? i_Data[ 95:64] : (fLstClk ? (c_fDec ? (!fOdd ? c_B : {c_B[23: 0], c_A[31:24]}) : (!fOdd ? c_B : {c_A[ 7: 0], c_B[31: 8]})) : c_B);
-        // n_C = fGetKey ? i_Data[ 63:32] : (fLstClk ? (c_fDec ? (fOdd ? c_C : {c_D[ 7: 0], c_C[31: 8]}) : (fOdd ? c_C : {c_C[23: 0], c_D[31:24]})) : c_C);
-        // n_D = fGetKey ? i_Data[ 31: 0] : (fLstClk ? (c_fDec ? (fOdd ? c_D : {c_C[ 7: 0], c_D[31: 8]}) : (fOdd ? c_D : {c_D[23: 0], c_C[31:24]})) : c_D);
-
-        n_A = fGetKey ? i_Data[127:96] : (fLstClk ? (!fOdd ? c_A : (c_fDec ? {c_A[23: 0], c_B[31:24]} : {c_B[ 7: 0], c_A[31: 8]})) : c_A);
-        n_B = fGetKey ? i_Data[ 95:64] : (fLstClk ? (!fOdd ? c_B : (c_fDec ? {c_B[23: 0], c_A[31:24]} : {c_A[ 7: 0], c_B[31: 8]})) : c_B);
-        n_C = fGetKey ? i_Data[ 63:32] : (fLstClk ? (fOdd ? c_C : (!c_fDec ? {c_D[ 7: 0], c_C[31: 8]} : {c_C[23: 0], c_D[31:24]})) : c_C);
-        n_D = fGetKey ? i_Data[ 31: 0] : (fLstClk ? (fOdd ? c_D : (!c_fDec ? {c_C[ 7: 0], c_D[31: 8]} : {c_D[23: 0], c_C[31:24]})) : c_D);
+        n_A = fGetKey ? i_Data[127:96] : (fLstClk & fOdd ? (fDec ? {c_A[23: 0], c_B[31:24]} : {c_B[ 7: 0], c_A[31: 8]}) : c_A);
+        n_B = fGetKey ? i_Data[ 95:64] : (fLstClk & fOdd ? (fDec ? {c_B[23: 0], c_A[31:24]} : {c_A[ 7: 0], c_B[31: 8]}) : c_B);
+        n_C = fGetKey ? i_Data[ 63:32] : (fLstClk & !fLstRound & !fOdd ? (fDec ? {c_D[ 7: 0], c_C[31: 8]} : {c_C[23: 0], c_D[31:24]}) : c_C);
+        n_D = fGetKey ? i_Data[ 31: 0] : (fLstClk & !fLstRound & !fOdd ? (fDec ? {c_C[ 7: 0], c_D[31: 8]} : {c_D[23: 0], c_C[31:24]}) : c_D);
 
         n_State = c_State;
         case(c_State)
